@@ -1,0 +1,30 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+venv/
+env/
+.env
+
+# Django
+*.sqlite3
+db.sqlite3
+*.log
+
+# Node
+node_modules/
+npm-debug.log*
+.expo/
+.expo-shared/
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+.claude/
+
+# Environment
+.env
+.env.local
