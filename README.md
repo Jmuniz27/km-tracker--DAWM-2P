@@ -84,6 +84,37 @@ DB_HOST=localhost
 DB_PORT=3306
 ```
 
+#### Configuración para Azure MySQL Flexible Server
+
+Si vas a usar Azure MySQL Flexible Server en lugar de MySQL local:
+
+1. Variables de entorno en `.env`:
+```bash
+DB_NAME=kmtracker_db
+DB_USER=kmtracker_admin
+DB_PASSWORD=tu_password_azure
+DB_HOST=kmtracker-db.mysql.database.azure.com
+DB_PORT=3306
+```
+
+2. Requisitos de Azure:
+   - SSL/TLS está habilitado automáticamente (configurado en settings.py)
+   - Agregar tu IP a las reglas de firewall en Azure Portal
+   - El formato del usuario NO incluye @servidor (usa Flexible Server, no Single Server)
+
+3. Verificar conexión:
+```bash
+# Desde línea de comandos con mysql client
+mysql -h kmtracker-db.mysql.database.azure.com -u kmtracker_admin -p --ssl-mode=REQUIRED
+
+# Desde Django
+python manage.py check --database default
+```
+
+4. Continuar con las migraciones normalmente (paso 6 más abajo)
+
+---
+
 5. Crear base de datos MySQL:
 ```bash
 mysql -u root -p
