@@ -22,6 +22,15 @@ export const TIPO_VEHICULO = {
   VAN: 'Van',
 };
 
+// Array de tipos de vehículo (para mapear en UI)
+export const TIPOS_VEHICULO = [
+  'Automóvil',
+  'Motocicleta',
+  'Camión',
+  'SUV',
+  'Van',
+];
+
 // Tipos de combustible
 export const TIPO_COMBUSTIBLE = {
   EXTRA: 'Extra',
@@ -30,12 +39,27 @@ export const TIPO_COMBUSTIBLE = {
   DIESEL: 'Diesel',
 };
 
+// Array de tipos de combustible (para mapear en UI)
+export const TIPOS_COMBUSTIBLE = [
+  'Extra',
+  'Super',
+  'Ecopaís',
+  'Diesel',
+];
+
 // Tipos de mantenimiento
 export const TIPO_MANTENIMIENTO = {
   PREVENTIVO: 'Preventivo',
   CORRECTIVO: 'Correctivo',
   EMERGENCIA: 'Emergencia',
 };
+
+// Array de tipos de mantenimiento (para mapear en UI)
+export const TIPOS_MANTENIMIENTO = [
+  'Preventivo',
+  'Correctivo',
+  'Emergencia',
+];
 
 // Categorías de mantenimiento
 export const CATEGORIA_MANTENIMIENTO = {
@@ -50,6 +74,19 @@ export const CATEGORIA_MANTENIMIENTO = {
   OTRO: 'Otro',
 };
 
+// Array de categorías de mantenimiento (para mapear en UI)
+export const CATEGORIAS_MANTENIMIENTO = [
+  'Motor',
+  'Frenos',
+  'Suspensión',
+  'Eléctrico',
+  'Transmisión',
+  'Neumáticos',
+  'Carrocería',
+  'Climatización',
+  'Otro',
+];
+
 // Prioridades de alerta
 export const PRIORIDAD_ALERTA = {
   BAJA: 'Baja',
@@ -57,6 +94,14 @@ export const PRIORIDAD_ALERTA = {
   ALTA: 'Alta',
   URGENTE: 'Urgente',
 };
+
+// Array de prioridades de alerta (para mapear en UI)
+export const PRIORIDADES_ALERTA = [
+  'Baja',
+  'Media',
+  'Alta',
+  'Urgente',
+];
 
 // Colores por prioridad
 export const COLORES_PRIORIDAD = {
