@@ -1,22 +1,27 @@
-// Servicio centralizado para peticiones a la API
-// NOTA: Antes de usar, instalar dependencias: npm install axios react-native-dotenv @react-native-async-storage/async-storage
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_URL } from '@env';
 
-// import axios from 'axios';
-// import { API_URL } from '@env';
-
-// Descomentar después de instalar las dependencias
-/*
+// Crear instancia de axios
 const api = axios.create({
-  baseURL: API_URL || 'http://localhost:8000/api',
+  baseURL: API_URL || 'http://127.0.0.1:8000/api',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptor para requests
+// Interceptor para agregar token JWT a las peticiones
 api.interceptors.request.use(
-  (config) => {
+  async (config) => {
+    try {
+      const token = await AsyncStorage.getItem('access_token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    } catch (error) {
+      console.error('Error al obtener token:', error);
+    }
     console.log('Request:', config.method.toUpperCase(), config.url);
     return config;
   },
@@ -25,16 +30,73 @@ api.interceptors.request.use(
   }
 );
 
-// Interceptor para responses
+// Interceptor para manejar respuestas y refrescar tokens
 api.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Si el error es 401 y no hemos intentado refrescar el token
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = await AsyncStorage.getItem('refresh_token');
+
+        if (refreshToken) {
+          const response = await axios.post(
+            `${API_URL}/auth/refresh/`,
+            { refresh: refreshToken }
+          );
+
+          const { access } = response.data;
+          await AsyncStorage.setItem('access_token', access);
+
+          // Reintentar la petición original con el nuevo token
+          originalRequest.headers.Authorization = `Bearer ${access}`;
+          return api(originalRequest);
+        }
+      } catch (refreshError) {
+        // Si falla el refresh, limpiar tokens y redirigir al login
+        await AsyncStorage.multiRemove(['access_token', 'refresh_token', 'user']);
+        console.error('Error al refrescar token:', refreshError);
+        return Promise.reject(refreshError);
+      }
+    }
+
     console.error('API Error:', error.response?.data || error.message);
     return Promise.reject(error);
   }
 );
+
+// Servicios de Autenticación
+export const authAPI = {
+  login: (username, password) =>
+    api.post('/auth/login/', { username, password }),
+
+  register: (userData) =>
+    api.post('/auth/register/', userData),
+
+  logout: async () => {
+    const refreshToken = await AsyncStorage.getItem('refresh_token');
+    return api.post('/auth/logout/', { refresh: refreshToken });
+  },
+
+  getProfile: () =>
+    api.get('/auth/me/'),
+
+  updateProfile: (data) =>
+    api.put('/auth/me/', data),
+
+  changePassword: (oldPassword, newPassword, newPassword2) =>
+    api.post('/auth/change-password/', {
+      old_password: oldPassword,
+      new_password: newPassword,
+      new_password2: newPassword2,
+    }),
+};
 
 // Servicios para Vehículos
 export const vehiculosAPI = {
@@ -81,10 +143,3 @@ export const alertasAPI = {
 };
 
 export default api;
-*/
-
-// Exportación temporal mientras se instalan dependencias
-export const vehiculosAPI = {};
-export const cargasAPI = {};
-export const mantenimientoAPI = {};
-export const alertasAPI = {};
