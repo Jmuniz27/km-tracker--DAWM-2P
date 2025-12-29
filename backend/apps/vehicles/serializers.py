@@ -15,7 +15,7 @@ class VehiculoSerializer(serializers.ModelSerializer):
             'numero_motor', 'numero_chasis', 'fecha_creacion',
             'fecha_actualizacion', 'activo'
         ]
-        read_only_fields = ['fecha_creacion', 'fecha_actualizacion']
+        read_only_fields = ['id', 'usuario', 'usuario_nombre', 'fecha_creacion', 'fecha_actualizacion']
 
     def validate_año(self, value):
         """Valida que el año sea razonable"""
