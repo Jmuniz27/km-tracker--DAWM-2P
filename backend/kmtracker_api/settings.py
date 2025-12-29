@@ -230,6 +230,9 @@ CORS_ALLOW_HEADERS = [
 
 # Production Security Settings
 if not DEBUG:
+    # Configurar Django para trabajar detrás del proxy de Azure
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
