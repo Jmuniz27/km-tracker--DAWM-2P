@@ -42,6 +42,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="fuel"
+        options={{
+          title: 'Combustible',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="gas-station" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="two"
         options={{
           href: null, // Ocultar tab "two" temporalmente
