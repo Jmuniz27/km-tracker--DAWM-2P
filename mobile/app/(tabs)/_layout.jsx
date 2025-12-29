@@ -51,6 +51,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="maintenance"
+        options={{
+          title: 'Mantenimiento',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="wrench" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="two"
         options={{
           href: null, // Ocultar tab "two" temporalmente
