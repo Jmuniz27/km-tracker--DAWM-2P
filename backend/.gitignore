@@ -1,6 +1,12 @@
 *.py[cod]
+*.pyc
 __pycache__/
 *.log
+*.pot
 .env
 venv/
 db.sqlite3
+db.sqlite3-journal
+
+# Production static files
+staticfiles/

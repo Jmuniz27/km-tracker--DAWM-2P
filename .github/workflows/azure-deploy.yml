@@ -1,0 +1,60 @@
+name: Deploy Backend to Azure
+
+on:
+  push:
+    branches: [main]
+    paths: ['backend/**']
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.11'
+  AZURE_WEBAPP_NAME: 'kmtracker-api'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: |
+        cd backend
+        python -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Collect static files
+      run: |
+        cd backend
+        source venv/bin/activate
+        export SECRET_KEY="test-key-for-build"
+        export DEBUG="False"
+        export ALLOWED_HOSTS="localhost"
+        export DB_NAME="test"
+        export DB_USER="test"
+        export DB_PASSWORD="test"
+        export DB_HOST="localhost"
+        export DB_PORT="3306"
+        python manage.py collectstatic --noinput --clear
+
+    - name: Package application
+      run: |
+        cd backend
+        zip -r ../backend.zip . -x "*.git*" "venv/*" "__pycache__/*" "*.pyc"
+
+    - name: Deploy to Azure App Service
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: backend.zip
+
+    - name: Cleanup
+      run: rm backend.zip
