@@ -1,6 +1,7 @@
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum, Avg, Count
 from .models import Mantenimiento, AlertaMantenimiento
 from .serializers import MantenimientoSerializer, AlertaMantenimientoSerializer
@@ -11,14 +12,17 @@ class MantenimientoViewSet(viewsets.ModelViewSet):
 
     queryset = Mantenimiento.objects.all()
     serializer_class = MantenimientoSerializer
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['tipo', 'categoria', 'descripcion', 'taller']
     ordering_fields = ['fecha', 'kilometraje', 'costo']
     ordering = ['-fecha']
 
     def get_queryset(self):
-        """Filtra los mantenimientos por vehículo"""
-        queryset = super().get_queryset()
+        """Filtra los mantenimientos por vehículos del usuario actual"""
+        # Solo mantenimientos de vehículos del usuario autenticado
+        queryset = Mantenimiento.objects.filter(vehiculo__usuario=self.request.user)
+
         vehiculo_id = self.request.query_params.get('vehiculo')
         if vehiculo_id:
             queryset = queryset.filter(vehiculo_id=vehiculo_id)
@@ -91,14 +95,17 @@ class AlertaMantenimientoViewSet(viewsets.ModelViewSet):
 
     queryset = AlertaMantenimiento.objects.all()
     serializer_class = AlertaMantenimientoSerializer
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['titulo', 'descripcion']
     ordering_fields = ['fecha_objetivo', 'kilometraje_objetivo', 'prioridad']
     ordering = ['-prioridad', 'fecha_objetivo']
 
     def get_queryset(self):
-        """Filtra las alertas por vehículo"""
-        queryset = super().get_queryset()
+        """Filtra las alertas por vehículos del usuario actual"""
+        # Solo alertas de vehículos del usuario autenticado
+        queryset = AlertaMantenimiento.objects.filter(vehiculo__usuario=self.request.user)
+
         vehiculo_id = self.request.query_params.get('vehiculo')
         if vehiculo_id:
             queryset = queryset.filter(vehiculo_id=vehiculo_id)

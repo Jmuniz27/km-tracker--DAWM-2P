@@ -1,6 +1,7 @@
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.db.models import Sum, Avg, Count
 from .models import CargaCombustible
 from .serializers import CargaCombustibleSerializer
@@ -11,14 +12,17 @@ class CargaCombustibleViewSet(viewsets.ModelViewSet):
 
     queryset = CargaCombustible.objects.all()
     serializer_class = CargaCombustibleSerializer
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['tipo_combustible', 'estacion_servicio']
     ordering_fields = ['fecha', 'kilometraje', 'litros', 'costo_total']
     ordering = ['-fecha']
 
     def get_queryset(self):
-        """Filtra las cargas por vehículo"""
-        queryset = super().get_queryset()
+        """Filtra las cargas por vehículos del usuario actual"""
+        # Solo cargas de vehículos del usuario autenticado
+        queryset = CargaCombustible.objects.filter(vehiculo__usuario=self.request.user)
+
         vehiculo_id = self.request.query_params.get('vehiculo')
         if vehiculo_id:
             queryset = queryset.filter(vehiculo_id=vehiculo_id)

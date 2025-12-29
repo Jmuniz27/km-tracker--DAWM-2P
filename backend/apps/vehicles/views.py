@@ -1,6 +1,7 @@
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from .models import Vehiculo
 from .serializers import VehiculoSerializer
 
@@ -10,6 +11,7 @@ class VehiculoViewSet(viewsets.ModelViewSet):
 
     queryset = Vehiculo.objects.all()
     serializer_class = VehiculoSerializer
+    permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['marca', 'modelo', 'placa', 'tipo']
     ordering_fields = ['fecha_creacion', 'marca', 'modelo', 'año', 'kilometraje_actual']
@@ -17,11 +19,8 @@ class VehiculoViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """Filtra los vehículos del usuario actual"""
-        queryset = super().get_queryset()
-        # Filtrar por usuario si se proporciona el parámetro
-        usuario_id = self.request.query_params.get('usuario')
-        if usuario_id:
-            queryset = queryset.filter(usuario_id=usuario_id)
+        # IMPORTANTE: Solo mostrar vehículos del usuario autenticado
+        queryset = Vehiculo.objects.filter(usuario=self.request.user)
 
         # Filtrar solo activos si se especifica
         solo_activos = self.request.query_params.get('activos')
@@ -29,6 +28,10 @@ class VehiculoViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(activo=True)
 
         return queryset
+
+    def perform_create(self, serializer):
+        """Asigna automáticamente el usuario autenticado al crear un vehículo"""
+        serializer.save(usuario=self.request.user)
 
     @action(detail=True, methods=['post'])
     def actualizar_kilometraje(self, request, pk=None):
