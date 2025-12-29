@@ -60,6 +60,15 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="alerts"
+        options={{
+          title: 'Alertas',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="bell" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="two"
         options={{
           href: null, // Ocultar tab "two" temporalmente
