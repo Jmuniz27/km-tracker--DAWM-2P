@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useAuth } from '../../src/contexts/AuthContext';
-import { vehiculosAPI, cargasAPI, mantenimientoAPI, alertasAPI } from '../../src/services/api';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import { useAuth } from '../../../src/contexts/AuthContext';
+import { vehiculosAPI, cargasAPI, mantenimientoAPI, alertasAPI } from '../../../src/services/api';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 export default function ProfileScreen() {
   const router = useRouter();

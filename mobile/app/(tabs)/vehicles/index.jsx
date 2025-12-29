@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { vehiculosAPI } from '../../src/services/api';
-import VehicleCard from '../../components/VehicleCard';
-import EmptyState from '../../components/EmptyState';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import { vehiculosAPI } from '../../../src/services/api';
+import VehicleCard from '../../../components/VehicleCard';
+import EmptyState from '../../../components/EmptyState';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 export default function VehiclesScreen() {
   const router = useRouter();

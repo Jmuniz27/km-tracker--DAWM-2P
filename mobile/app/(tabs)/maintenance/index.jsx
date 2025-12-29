@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { mantenimientoAPI } from '../../src/services/api';
-import MaintenanceCard from '../../components/MaintenanceCard';
-import EmptyState from '../../components/EmptyState';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import { mantenimientoAPI } from '../../../src/services/api';
+import MaintenanceCard from '../../../components/MaintenanceCard';
+import EmptyState from '../../../components/EmptyState';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 export default function MaintenanceScreen() {
   const router = useRouter();

@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { alertasAPI } from '../../src/services/api';
-import AlertCard from '../../components/AlertCard';
-import EmptyState from '../../components/EmptyState';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import { alertasAPI } from '../../../src/services/api';
+import AlertCard from '../../../components/AlertCard';
+import EmptyState from '../../../components/EmptyState';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 export default function AlertsScreen() {
   const router = useRouter();

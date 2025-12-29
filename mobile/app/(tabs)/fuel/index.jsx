@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { cargasAPI } from '../../src/services/api';
-import FuelCard from '../../components/FuelCard';
-import EmptyState from '../../components/EmptyState';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import { cargasAPI } from '../../../src/services/api';
+import FuelCard from '../../../components/FuelCard';
+import EmptyState from '../../../components/EmptyState';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 export default function FuelScreen() {
   const router = useRouter();
