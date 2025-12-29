@@ -30,6 +30,7 @@ export default function CreateVehicleScreen() {
     placa: '',
     tipo_vehiculo: 'Automóvil',
     kilometraje_actual: '',
+    capacidad_tanque: '',
   });
 
   useEffect(() => {
@@ -46,10 +47,11 @@ export default function CreateVehicleScreen() {
       setFormData({
         marca: vehicle.marca,
         modelo: vehicle.modelo,
-        anio: vehicle.anio.toString(),
+        anio: vehicle.año.toString(),
         placa: vehicle.placa,
         tipo_vehiculo: vehicle.tipo_vehiculo,
         kilometraje_actual: vehicle.kilometraje_actual.toString(),
+        capacidad_tanque: vehicle.capacidad_tanque?.toString() || '',
       });
     } catch (error) {
       console.error('Error loading vehicle:', error);
@@ -91,6 +93,15 @@ export default function CreateVehicleScreen() {
       Alert.alert('Error', 'El kilometraje debe ser mayor o igual a 0');
       return false;
     }
+    if (!formData.capacidad_tanque) {
+      Alert.alert('Error', 'La capacidad del tanque es requerida');
+      return false;
+    }
+    const capacidad = parseFloat(formData.capacidad_tanque);
+    if (isNaN(capacidad) || capacidad <= 0) {
+      Alert.alert('Error', 'La capacidad del tanque debe ser mayor a 0');
+      return false;
+    }
     return true;
   };
 
@@ -104,10 +115,11 @@ export default function CreateVehicleScreen() {
       const data = {
         marca: formData.marca.trim(),
         modelo: formData.modelo.trim(),
-        anio: parseInt(formData.anio),
+        año: parseInt(formData.anio),
         placa: formData.placa.trim().toUpperCase(),
         tipo_vehiculo: formData.tipo_vehiculo,
         kilometraje_actual: parseFloat(formData.kilometraje_actual),
+        capacidad_tanque: parseFloat(formData.capacidad_tanque),
       };
 
       if (isEditing) {
@@ -244,6 +256,20 @@ export default function CreateVehicleScreen() {
               editable={!loading}
             />
             <Text style={styles.hint}>Ingresa el kilometraje en km</Text>
+          </View>
+
+          {/* Capacidad del Tanque */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Capacidad del Tanque *</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="45"
+              value={formData.capacidad_tanque}
+              onChangeText={(text) => setFormData({ ...formData, capacidad_tanque: text })}
+              keyboardType="numeric"
+              editable={!loading}
+            />
+            <Text style={styles.hint}>Ingresa la capacidad en litros</Text>
           </View>
         </View>
       </ScrollView>
