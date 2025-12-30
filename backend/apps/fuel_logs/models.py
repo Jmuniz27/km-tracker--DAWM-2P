@@ -18,8 +18,8 @@ class CargaCombustible(models.Model):
     # Información de la carga
     fecha = models.DateTimeField()
     kilometraje = models.PositiveIntegerField(help_text='Kilometraje al momento de la carga')
-    litros = models.DecimalField(max_digits=6, decimal_places=2, help_text='Litros cargados')
-    precio_litro = models.DecimalField(max_digits=6, decimal_places=2, help_text='Precio por litro')
+    galones = models.DecimalField(max_digits=6, decimal_places=2, help_text='Galones cargados')
+    precio_galon = models.DecimalField(max_digits=6, decimal_places=2, help_text='Precio por galón')
     costo_total = models.DecimalField(max_digits=8, decimal_places=2)
     tipo_combustible = models.CharField(max_length=10, choices=TIPO_COMBUSTIBLE)
 
@@ -38,11 +38,11 @@ class CargaCombustible(models.Model):
         ordering = ['-fecha']
 
     def __str__(self):
-        return f"{self.vehiculo} - {self.fecha.strftime('%Y-%m-%d')} - {self.litros}L"
+        return f"{self.vehiculo} - {self.fecha.strftime('%Y-%m-%d')} - {self.galones} gal"
 
     @property
     def rendimiento(self):
-        """Calcula el rendimiento (km/L) basado en la carga anterior"""
+        """Calcula el rendimiento (km/gal) basado en la carga anterior"""
         carga_anterior = CargaCombustible.objects.filter(
             vehiculo=self.vehiculo,
             fecha__lt=self.fecha
@@ -50,6 +50,6 @@ class CargaCombustible(models.Model):
 
         if carga_anterior and self.tanque_lleno and carga_anterior.tanque_lleno:
             km_recorridos = self.kilometraje - carga_anterior.kilometraje
-            if km_recorridos > 0 and self.litros > 0:
-                return round(km_recorridos / float(self.litros), 2)
+            if km_recorridos > 0 and self.galones > 0:
+                return round(km_recorridos / float(self.galones), 2)
         return None

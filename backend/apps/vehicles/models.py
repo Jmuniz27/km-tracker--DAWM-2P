@@ -25,7 +25,7 @@ class Vehiculo(models.Model):
 
     # Información de kilometraje y capacidad
     kilometraje_actual = models.PositiveIntegerField(default=0)
-    capacidad_tanque = models.DecimalField(max_digits=5, decimal_places=2, help_text='Capacidad en litros')
+    capacidad_tanque = models.DecimalField(max_digits=5, decimal_places=2, help_text='Capacidad del tanque en galones')
 
     # Información adicional
     color = models.CharField(max_length=30, blank=True, null=True)
