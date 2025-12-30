@@ -54,7 +54,7 @@ const FuelCard = ({ fuelLog, onPress }) => {
           <View style={styles.detailRow}>
             <View style={styles.detailItem}>
               <MaterialCommunityIcons name="fuel" size={16} color="#8E8E93" />
-              <Text style={styles.detailText}>{fuelLog.litros} L</Text>
+              <Text style={styles.detailText}>{fuelLog.galones} gal</Text>
             </View>
             <View style={styles.detailItem}>
               <MaterialCommunityIcons name="cash" size={16} color="#8E8E93" />
