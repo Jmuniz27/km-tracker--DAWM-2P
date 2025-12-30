@@ -16,7 +16,7 @@ class CargaCombustibleSerializer(serializers.ModelSerializer):
             'tanque_lleno', 'notas', 'rendimiento', 'fecha_creacion',
             'fecha_actualizacion'
         ]
-        read_only_fields = ['fecha_creacion', 'fecha_actualizacion']
+        read_only_fields = ['costo_total', 'fecha_creacion', 'fecha_actualizacion']
 
     def get_vehiculo_info(self, obj):
         """Retorna información básica del vehículo"""
