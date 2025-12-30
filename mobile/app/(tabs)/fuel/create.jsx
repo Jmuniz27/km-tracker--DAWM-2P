@@ -27,8 +27,8 @@ export default function CreateFuelLogScreen() {
   const [formData, setFormData] = useState({
     vehiculo: '',
     fecha: new Date().toISOString().split('T')[0],
-    litros: '',
-    precio_litro: '',
+    galones: '',
+    precio_galon: '',
     tipo_combustible: 'Extra',
     kilometraje: '',
     estacion_servicio: '',
@@ -66,8 +66,8 @@ export default function CreateFuelLogScreen() {
       setFormData({
         vehiculo: fuelLog.vehiculo.toString(),
         fecha: fuelLog.fecha,
-        litros: fuelLog.litros.toString(),
-        precio_litro: fuelLog.precio_litro.toString(),
+        galones: fuelLog.galones.toString(),
+        precio_galon: fuelLog.precio_galon.toString(),
         tipo_combustible: fuelLog.tipo_combustible,
         kilometraje: fuelLog.kilometraje.toString(),
         estacion_servicio: fuelLog.estacion_servicio || '',
@@ -83,9 +83,9 @@ export default function CreateFuelLogScreen() {
   };
 
   const calculateTotal = () => {
-    const litros = parseFloat(formData.litros) || 0;
-    const precioLitro = parseFloat(formData.precio_litro) || 0;
-    return (litros * precioLitro).toFixed(2);
+    const galones = parseFloat(formData.galones) || 0;
+    const precioGalon = parseFloat(formData.precio_galon) || 0;
+    return (galones * precioGalon).toFixed(2);
   };
 
   const validate = () => {
@@ -97,20 +97,20 @@ export default function CreateFuelLogScreen() {
       Alert.alert('Error', 'La fecha es requerida');
       return false;
     }
-    if (!formData.litros) {
-      Alert.alert('Error', 'Los litros son requeridos');
+    if (!formData.galones) {
+      Alert.alert('Error', 'Los galones son requeridos');
       return false;
     }
-    const litros = parseFloat(formData.litros);
-    if (isNaN(litros) || litros <= 0) {
-      Alert.alert('Error', 'Los litros deben ser mayores a 0');
+    const galones = parseFloat(formData.galones);
+    if (isNaN(galones) || galones <= 0) {
+      Alert.alert('Error', 'Los galones deben ser mayores a 0');
       return false;
     }
-    if (!formData.precio_litro) {
-      Alert.alert('Error', 'El precio por litro es requerido');
+    if (!formData.precio_galon) {
+      Alert.alert('Error', 'El precio por galón es requerido');
       return false;
     }
-    const precio = parseFloat(formData.precio_litro);
+    const precio = parseFloat(formData.precio_galon);
     if (isNaN(precio) || precio <= 0) {
       Alert.alert('Error', 'El precio debe ser mayor a 0');
       return false;
@@ -137,8 +137,8 @@ export default function CreateFuelLogScreen() {
       const data = {
         vehiculo: parseInt(formData.vehiculo),
         fecha: formData.fecha,
-        litros: parseFloat(formData.litros),
-        precio_litro: parseFloat(formData.precio_litro),
+        galones: parseFloat(formData.galones),
+        precio_galon: parseFloat(formData.precio_galon),
         tipo_combustible: formData.tipo_combustible,
         kilometraje: parseFloat(formData.kilometraje),
         estacion_servicio: formData.estacion_servicio.trim() || null,
@@ -250,27 +250,27 @@ export default function CreateFuelLogScreen() {
             <Text style={styles.hint}>Formato: YYYY-MM-DD</Text>
           </View>
 
-          {/* Litros y Precio en fila */}
+          {/* Galones y Precio en fila */}
           <View style={[styles.row, { flexDirection: isMobile ? 'column' : 'row' }]}>
             <View style={[styles.inputGroup, { flex: isMobile ? 1 : 0.48 }]}>
-              <Text style={styles.label}>Litros *</Text>
+              <Text style={styles.label}>Galones *</Text>
               <TextInput
                 style={styles.input}
-                placeholder="15.5"
-                value={formData.litros}
-                onChangeText={(text) => setFormData({ ...formData, litros: text })}
+                placeholder="10.5"
+                value={formData.galones}
+                onChangeText={(text) => setFormData({ ...formData, galones: text })}
                 keyboardType="decimal-pad"
                 editable={!loading}
               />
             </View>
 
             <View style={[styles.inputGroup, { flex: isMobile ? 1 : 0.48 }]}>
-              <Text style={styles.label}>Precio/Litro *</Text>
+              <Text style={styles.label}>Precio/Galón *</Text>
               <TextInput
                 style={styles.input}
                 placeholder="2.50"
-                value={formData.precio_litro}
-                onChangeText={(text) => setFormData({ ...formData, precio_litro: text })}
+                value={formData.precio_galon}
+                onChangeText={(text) => setFormData({ ...formData, precio_galon: text })}
                 keyboardType="decimal-pad"
                 editable={!loading}
               />
