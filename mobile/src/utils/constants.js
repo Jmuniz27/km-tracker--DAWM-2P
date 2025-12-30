@@ -117,3 +117,12 @@ export const COLORES_TIPO_MANTENIMIENTO = {
   CORRECTIVO: COLORS.warning,
   EMERGENCIA: COLORS.danger,
 };
+
+// Factores de conversión de unidades
+export const CONVERSION = {
+  LITERS_TO_GALLONS: 0.264172,
+  GALLONS_TO_LITERS: 3.785,
+};
+
+// Nota: La app ahora usa GALONES exclusivamente
+// Ecuador usa galones como unidad estándar de combustible
