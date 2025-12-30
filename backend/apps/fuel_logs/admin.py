@@ -6,7 +6,7 @@ from .models import CargaCombustible
 class CargaCombustibleAdmin(admin.ModelAdmin):
     """Configuración del admin para CargaCombustible"""
 
-    list_display = ['vehiculo', 'fecha', 'litros', 'tipo_combustible', 'costo_total', 'kilometraje', 'tanque_lleno']
+    list_display = ['vehiculo', 'fecha', 'galones', 'tipo_combustible', 'costo_total', 'kilometraje', 'tanque_lleno']
     list_filter = ['tipo_combustible', 'tanque_lleno', 'fecha']
     search_fields = ['vehiculo__placa', 'vehiculo__marca', 'vehiculo__modelo', 'estacion_servicio']
     readonly_fields = ['fecha_creacion', 'fecha_actualizacion', 'rendimiento']
@@ -17,7 +17,7 @@ class CargaCombustibleAdmin(admin.ModelAdmin):
             'fields': ('vehiculo',)
         }),
         ('Información de la Carga', {
-            'fields': ('fecha', 'kilometraje', 'litros', 'precio_litro', 'costo_total', 'tipo_combustible', 'tanque_lleno')
+            'fields': ('fecha', 'kilometraje', 'galones', 'precio_galon', 'costo_total', 'tipo_combustible', 'tanque_lleno')
         }),
         ('Información Adicional', {
             'fields': ('estacion_servicio', 'notas')
@@ -35,5 +35,5 @@ class CargaCombustibleAdmin(admin.ModelAdmin):
     def rendimiento(self, obj):
         """Muestra el rendimiento calculado"""
         rend = obj.rendimiento
-        return f"{rend} km/L" if rend else "N/A"
+        return f"{rend} km/gal" if rend else "N/A"
     rendimiento.short_description = 'Rendimiento'

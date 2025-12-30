@@ -11,8 +11,8 @@ class CargaCombustibleSerializer(serializers.ModelSerializer):
     class Meta:
         model = CargaCombustible
         fields = [
-            'id', 'vehiculo', 'vehiculo_info', 'fecha', 'kilometraje', 'litros',
-            'precio_litro', 'costo_total', 'tipo_combustible', 'estacion_servicio',
+            'id', 'vehiculo', 'vehiculo_info', 'fecha', 'kilometraje', 'galones',
+            'precio_galon', 'costo_total', 'tipo_combustible', 'estacion_servicio',
             'tanque_lleno', 'notas', 'rendimiento', 'fecha_creacion',
             'fecha_actualizacion'
         ]
@@ -27,16 +27,16 @@ class CargaCombustibleSerializer(serializers.ModelSerializer):
             'placa': obj.vehiculo.placa
         }
 
-    def validate_litros(self, value):
-        """Valida que los litros sean positivos"""
+    def validate_galones(self, value):
+        """Valida que los galones sean positivos"""
         if value <= 0:
-            raise serializers.ValidationError("Los litros deben ser mayores a 0")
+            raise serializers.ValidationError("Los galones deben ser mayores a 0")
         return value
 
-    def validate_precio_litro(self, value):
-        """Valida que el precio por litro sea positivo"""
+    def validate_precio_galon(self, value):
+        """Valida que el precio por galón sea positivo"""
         if value <= 0:
-            raise serializers.ValidationError("El precio por litro debe ser mayor a 0")
+            raise serializers.ValidationError("El precio por galón debe ser mayor a 0")
         return value
 
     def validate_kilometraje(self, value):
@@ -55,7 +55,7 @@ class CargaCombustibleSerializer(serializers.ModelSerializer):
                 })
 
         # Calcular costo_total automáticamente si no se proporciona
-        if 'litros' in data and 'precio_litro' in data:
-            data['costo_total'] = data['litros'] * data['precio_litro']
+        if 'galones' in data and 'precio_galon' in data:
+            data['costo_total'] = data['galones'] * data['precio_galon']
 
         return data
