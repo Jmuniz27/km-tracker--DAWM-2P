@@ -110,8 +110,8 @@ export default function FuelDetailScreen() {
   }
 
   const totalCost = parseFloat(fuel.costo);
-  const pricePerLiter = parseFloat(fuel.precio_litro);
-  const liters = parseFloat(fuel.litros);
+  const pricePerGallon = parseFloat(fuel.precio_galon);
+  const gallons = parseFloat(fuel.galones);
 
   return (
     <View style={styles.container}>
@@ -185,17 +185,17 @@ export default function FuelDetailScreen() {
           <View style={styles.detailRow}>
             <View style={styles.detailItem}>
               <MaterialCommunityIcons name="gas-cylinder" size={20} color="#8E8E93" />
-              <Text style={styles.detailLabel}>Litros</Text>
+              <Text style={styles.detailLabel}>Galones</Text>
             </View>
-            <Text style={styles.detailValue}>{liters.toFixed(2)} L</Text>
+            <Text style={styles.detailValue}>{gallons.toFixed(2)} gal</Text>
           </View>
 
           <View style={styles.detailRow}>
             <View style={styles.detailItem}>
               <MaterialCommunityIcons name="cash" size={20} color="#8E8E93" />
-              <Text style={styles.detailLabel}>Precio por Litro</Text>
+              <Text style={styles.detailLabel}>Precio por Galón</Text>
             </View>
-            <Text style={styles.detailValue}>${pricePerLiter.toFixed(2)}</Text>
+            <Text style={styles.detailValue}>${pricePerGallon.toFixed(2)}</Text>
           </View>
 
           <View style={styles.detailRow}>
