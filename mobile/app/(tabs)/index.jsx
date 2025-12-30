@@ -249,7 +249,7 @@ export default function HomeScreen() {
                   <Text style={styles.fuelDate}>{formatDate(fuel.fecha)}</Text>
                 </View>
                 <View style={styles.fuelRight}>
-                  <Text style={styles.fuelLiters}>{fuel.litros}L</Text>
+                  <Text style={styles.fuelLiters}>{fuel.galones} gal</Text>
                   <Text style={styles.fuelPrice}>${parseFloat(fuel.costo).toFixed(2)}</Text>
                 </View>
               </TouchableOpacity>

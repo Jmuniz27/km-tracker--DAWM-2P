@@ -269,7 +269,7 @@ export default function CreateVehicleScreen() {
               keyboardType="numeric"
               editable={!loading}
             />
-            <Text style={styles.hint}>Ingresa la capacidad en litros</Text>
+            <Text style={styles.hint}>Ingresa la capacidad en galones</Text>
           </View>
         </View>
       </ScrollView>
