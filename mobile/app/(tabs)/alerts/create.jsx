@@ -31,7 +31,7 @@ export default function CreateAlertScreen() {
     tipo_alerta: 'Kilometraje',
     kilometraje_objetivo: '',
     fecha_objetivo: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 días adelante
-    prioridad: 'Media',
+    prioridad: 'MEDIA', // Clave en mayúsculas para API
   });
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export default function CreateAlertScreen() {
       const data = {
         vehiculo: parseInt(formData.vehiculo),
         titulo: formData.titulo.trim(),
-        descripcion: formData.descripcion.trim() || null,
+        descripcion: formData.descripcion.trim(), // descripcion es requerido en el backend
         tipo_alerta: formData.tipo_alerta,
         kilometraje_objetivo: formData.tipo_alerta === 'Kilometraje' ? parseFloat(formData.kilometraje_objetivo) : null,
         fecha_objetivo: formData.tipo_alerta === 'Fecha' ? formData.fecha_objetivo : null,
@@ -332,22 +332,22 @@ export default function CreateAlertScreen() {
             <View style={styles.priorityButtons}>
               {PRIORIDADES_ALERTA.map((prioridad) => (
                 <TouchableOpacity
-                  key={prioridad}
+                  key={prioridad.value}
                   style={[
                     styles.priorityButton,
-                    formData.prioridad === prioridad && styles.priorityButtonActive,
+                    formData.prioridad === prioridad.value && styles.priorityButtonActive,
                   ]}
-                  onPress={() => setFormData({ ...formData, prioridad })}
+                  onPress={() => setFormData({ ...formData, prioridad: prioridad.value })}
                   disabled={loading}
                   activeOpacity={0.7}
                 >
                   <Text
                     style={[
                       styles.priorityButtonText,
-                      formData.prioridad === prioridad && styles.priorityButtonTextActive,
+                      formData.prioridad === prioridad.value && styles.priorityButtonTextActive,
                     ]}
                   >
-                    {prioridad}
+                    {prioridad.label}
                   </Text>
                 </TouchableOpacity>
               ))}

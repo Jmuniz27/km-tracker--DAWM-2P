@@ -29,7 +29,7 @@ export default function CreateFuelLogScreen() {
     fecha: new Date().toISOString().split('T')[0],
     galones: '',
     precio_galon: '',
-    tipo_combustible: 'Extra',
+    tipo_combustible: 'EXTRA', // Clave en mayúsculas para API
     kilometraje: '',
     estacion_servicio: '',
     notas: '',
@@ -289,22 +289,22 @@ export default function CreateFuelLogScreen() {
             <View style={styles.fuelButtons}>
               {TIPOS_COMBUSTIBLE.map((tipo) => (
                 <TouchableOpacity
-                  key={tipo}
+                  key={tipo.value}
                   style={[
                     styles.fuelButton,
-                    formData.tipo_combustible === tipo && styles.fuelButtonActive,
+                    formData.tipo_combustible === tipo.value && styles.fuelButtonActive,
                   ]}
-                  onPress={() => setFormData({ ...formData, tipo_combustible: tipo })}
+                  onPress={() => setFormData({ ...formData, tipo_combustible: tipo.value })}
                   disabled={loading}
                   activeOpacity={0.7}
                 >
                   <Text
                     style={[
                       styles.fuelButtonText,
-                      formData.tipo_combustible === tipo && styles.fuelButtonTextActive,
+                      formData.tipo_combustible === tipo.value && styles.fuelButtonTextActive,
                     ]}
                   >
-                    {tipo}
+                    {tipo.label}
                   </Text>
                 </TouchableOpacity>
               ))}

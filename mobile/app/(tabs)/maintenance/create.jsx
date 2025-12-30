@@ -27,8 +27,8 @@ export default function CreateMaintenanceScreen() {
   const [formData, setFormData] = useState({
     vehiculo: '',
     fecha: new Date().toISOString().split('T')[0],
-    tipo_mantenimiento: 'Preventivo',
-    categoria: 'Motor',
+    tipo: 'PREVENTIVO', // Clave en mayúsculas para API
+    categoria: 'MOTOR', // Clave en mayúsculas para API
     descripcion: '',
     costo: '',
     kilometraje: '',
@@ -66,7 +66,7 @@ export default function CreateMaintenanceScreen() {
       setFormData({
         vehiculo: maintenance.vehiculo.toString(),
         fecha: maintenance.fecha,
-        tipo_mantenimiento: maintenance.tipo_mantenimiento,
+        tipo: maintenance.tipo, // El backend usa 'tipo', no 'tipo_mantenimiento'
         categoria: maintenance.categoria,
         descripcion: maintenance.descripcion,
         costo: maintenance.costo ? maintenance.costo.toString() : '',
@@ -132,7 +132,7 @@ export default function CreateMaintenanceScreen() {
       const data = {
         vehiculo: parseInt(formData.vehiculo),
         fecha: formData.fecha,
-        tipo_mantenimiento: formData.tipo_mantenimiento,
+        tipo: formData.tipo, // El backend usa 'tipo', no 'tipo_mantenimiento'
         categoria: formData.categoria,
         descripcion: formData.descripcion.trim(),
         costo: formData.costo ? parseFloat(formData.costo) : null,
@@ -251,22 +251,22 @@ export default function CreateMaintenanceScreen() {
             <View style={styles.typeButtons}>
               {TIPOS_MANTENIMIENTO.map((tipo) => (
                 <TouchableOpacity
-                  key={tipo}
+                  key={tipo.value}
                   style={[
                     styles.typeButton,
-                    formData.tipo_mantenimiento === tipo && styles.typeButtonActive,
+                    formData.tipo === tipo.value && styles.typeButtonActive,
                   ]}
-                  onPress={() => setFormData({ ...formData, tipo_mantenimiento: tipo })}
+                  onPress={() => setFormData({ ...formData, tipo: tipo.value })}
                   disabled={loading}
                   activeOpacity={0.7}
                 >
                   <Text
                     style={[
                       styles.typeButtonText,
-                      formData.tipo_mantenimiento === tipo && styles.typeButtonTextActive,
+                      formData.tipo === tipo.value && styles.typeButtonTextActive,
                     ]}
                   >
-                    {tipo}
+                    {tipo.label}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -279,22 +279,22 @@ export default function CreateMaintenanceScreen() {
             <View style={styles.categoryButtons}>
               {CATEGORIAS_MANTENIMIENTO.map((cat) => (
                 <TouchableOpacity
-                  key={cat}
+                  key={cat.value}
                   style={[
                     styles.categoryButton,
-                    formData.categoria === cat && styles.categoryButtonActive,
+                    formData.categoria === cat.value && styles.categoryButtonActive,
                   ]}
-                  onPress={() => setFormData({ ...formData, categoria: cat })}
+                  onPress={() => setFormData({ ...formData, categoria: cat.value })}
                   disabled={loading}
                   activeOpacity={0.7}
                 >
                   <Text
                     style={[
                       styles.categoryButtonText,
-                      formData.categoria === cat && styles.categoryButtonTextActive,
+                      formData.categoria === cat.value && styles.categoryButtonTextActive,
                     ]}
                   >
-                    {cat}
+                    {cat.label}
                   </Text>
                 </TouchableOpacity>
               ))}

@@ -40,11 +40,12 @@ export const TIPO_COMBUSTIBLE = {
 };
 
 // Array de tipos de combustible (para mapear en UI)
+// Ahora usa objetos con value (clave para API) y label (display)
 export const TIPOS_COMBUSTIBLE = [
-  'Extra',
-  'Super',
-  'Ecopaís',
-  'Diesel',
+  { value: 'EXTRA', label: 'Extra' },
+  { value: 'SUPER', label: 'Super' },
+  { value: 'ECOPAIS', label: 'Ecopaís' },
+  { value: 'DIESEL', label: 'Diesel' },
 ];
 
 // Tipos de mantenimiento
@@ -56,9 +57,9 @@ export const TIPO_MANTENIMIENTO = {
 
 // Array de tipos de mantenimiento (para mapear en UI)
 export const TIPOS_MANTENIMIENTO = [
-  'Preventivo',
-  'Correctivo',
-  'Emergencia',
+  { value: 'PREVENTIVO', label: 'Preventivo' },
+  { value: 'CORRECTIVO', label: 'Correctivo' },
+  { value: 'EMERGENCIA', label: 'Emergencia' },
 ];
 
 // Categorías de mantenimiento
@@ -76,15 +77,15 @@ export const CATEGORIA_MANTENIMIENTO = {
 
 // Array de categorías de mantenimiento (para mapear en UI)
 export const CATEGORIAS_MANTENIMIENTO = [
-  'Motor',
-  'Frenos',
-  'Suspensión',
-  'Eléctrico',
-  'Transmisión',
-  'Neumáticos',
-  'Carrocería',
-  'Climatización',
-  'Otro',
+  { value: 'MOTOR', label: 'Motor' },
+  { value: 'FRENOS', label: 'Frenos' },
+  { value: 'SUSPENSION', label: 'Suspensión' },
+  { value: 'ELECTRICO', label: 'Eléctrico' },
+  { value: 'TRANSMISION', label: 'Transmisión' },
+  { value: 'NEUMATICOS', label: 'Neumáticos' },
+  { value: 'CARROCERIA', label: 'Carrocería' },
+  { value: 'CLIMATIZACION', label: 'Climatización' },
+  { value: 'OTRO', label: 'Otro' },
 ];
 
 // Prioridades de alerta
@@ -97,10 +98,10 @@ export const PRIORIDAD_ALERTA = {
 
 // Array de prioridades de alerta (para mapear en UI)
 export const PRIORIDADES_ALERTA = [
-  'Baja',
-  'Media',
-  'Alta',
-  'Urgente',
+  { value: 'BAJA', label: 'Baja' },
+  { value: 'MEDIA', label: 'Media' },
+  { value: 'ALTA', label: 'Alta' },
+  { value: 'URGENTE', label: 'Urgente' },
 ];
 
 // Colores por prioridad
