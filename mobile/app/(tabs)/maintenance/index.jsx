@@ -40,9 +40,9 @@ export default function MaintenanceScreen() {
       if (logs.length > 0) {
         const withCost = logs.filter(m => m.costo);
         const totalCost = withCost.reduce((sum, m) => sum + parseFloat(m.costo), 0);
-        const preventivo = logs.filter(m => m.tipo_mantenimiento === 'Preventivo').length;
-        const correctivo = logs.filter(m => m.tipo_mantenimiento === 'Correctivo').length;
-        const emergencia = logs.filter(m => m.tipo_mantenimiento === 'Emergencia').length;
+        const preventivo = logs.filter(m => m.tipo === 'PREVENTIVO').length;
+        const correctivo = logs.filter(m => m.tipo === 'CORRECTIVO').length;
+        const emergencia = logs.filter(m => m.tipo === 'EMERGENCIA').length;
 
         setStats({
           count: logs.length,

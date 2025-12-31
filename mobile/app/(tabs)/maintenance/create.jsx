@@ -33,7 +33,7 @@ export default function CreateMaintenanceScreen() {
     costo: '',
     kilometraje: '',
     taller: '',
-    proximo_kilometraje: '',
+    proximo_mantenimiento_km: '',
   });
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function CreateMaintenanceScreen() {
         costo: maintenance.costo ? maintenance.costo.toString() : '',
         kilometraje: maintenance.kilometraje.toString(),
         taller: maintenance.taller || '',
-        proximo_kilometraje: maintenance.proximo_kilometraje ? maintenance.proximo_kilometraje.toString() : '',
+        proximo_mantenimiento_km: maintenance.proximo_mantenimiento_km ? maintenance.proximo_mantenimiento_km.toString() : '',
       });
     } catch (error) {
       console.error('Error loading maintenance:', error);
@@ -112,8 +112,8 @@ export default function CreateMaintenanceScreen() {
         return false;
       }
     }
-    if (formData.proximo_kilometraje) {
-      const proximoKm = parseFloat(formData.proximo_kilometraje);
+    if (formData.proximo_mantenimiento_km) {
+      const proximoKm = parseFloat(formData.proximo_mantenimiento_km);
       if (isNaN(proximoKm) || proximoKm <= km) {
         Alert.alert('Error', 'El próximo kilometraje debe ser mayor al actual');
         return false;
@@ -138,7 +138,7 @@ export default function CreateMaintenanceScreen() {
         costo: formData.costo ? parseFloat(formData.costo) : null,
         kilometraje: parseFloat(formData.kilometraje),
         taller: formData.taller.trim() || null,
-        proximo_kilometraje: formData.proximo_kilometraje ? parseFloat(formData.proximo_kilometraje) : null,
+        proximo_mantenimiento_km: formData.proximo_mantenimiento_km ? parseFloat(formData.proximo_mantenimiento_km) : null,
       };
 
       if (isEditing) {
@@ -361,8 +361,8 @@ export default function CreateMaintenanceScreen() {
             <TextInput
               style={styles.input}
               placeholder="55000"
-              value={formData.proximo_kilometraje}
-              onChangeText={(text) => setFormData({ ...formData, proximo_kilometraje: text })}
+              value={formData.proximo_mantenimiento_km}
+              onChangeText={(text) => setFormData({ ...formData, proximo_mantenimiento_km: text })}
               keyboardType="numeric"
               editable={!loading}
             />

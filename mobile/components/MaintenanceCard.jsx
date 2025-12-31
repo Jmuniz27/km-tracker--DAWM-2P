@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { getTipoMantenimientoLabel, getCategoriaMantenimientoLabel } from '../src/utils/constants';
 
 const MaintenanceCard = ({ maintenance, onPress }) => {
   const { width } = useWindowDimensions();
@@ -8,24 +9,24 @@ const MaintenanceCard = ({ maintenance, onPress }) => {
 
   const getTypeColor = (tipo) => {
     const colorMap = {
-      'Preventivo': '#34C759',
-      'Correctivo': '#FF9500',
-      'Emergencia': '#FF3B30',
+      'PREVENTIVO': '#34C759',
+      'CORRECTIVO': '#FF9500',
+      'EMERGENCIA': '#FF3B30',
     };
     return colorMap[tipo] || '#8E8E93';
   };
 
   const getCategoryIcon = (categoria) => {
     const iconMap = {
-      'Motor': 'engine',
-      'Frenos': 'car-brake-alert',
-      'Suspensión': 'car-lifted-pickup',
-      'Eléctrico': 'car-battery',
-      'Transmisión': 'car-shift-pattern',
-      'Neumáticos': 'tire',
-      'Carrocería': 'car-door',
-      'Climatización': 'air-conditioner',
-      'Otro': 'wrench',
+      'MOTOR': 'engine',
+      'FRENOS': 'car-brake-alert',
+      'SUSPENSION': 'car-lifted-pickup',
+      'ELECTRICO': 'car-battery',
+      'TRANSMISION': 'car-shift-pattern',
+      'NEUMATICOS': 'tire',
+      'CARROCERIA': 'car-door',
+      'CLIMATIZACION': 'air-conditioner',
+      'OTRO': 'wrench',
     };
     return iconMap[categoria] || 'wrench';
   };
@@ -51,11 +52,11 @@ const MaintenanceCard = ({ maintenance, onPress }) => {
       activeOpacity={0.7}
     >
       <View style={styles.header}>
-        <View style={[styles.iconContainer, { backgroundColor: getTypeColor(maintenance.tipo_mantenimiento) + '20' }]}>
+        <View style={[styles.iconContainer, { backgroundColor: getTypeColor(maintenance.tipo) + '20' }]}>
           <MaterialCommunityIcons
             name={getCategoryIcon(maintenance.categoria)}
             size={24}
-            color={getTypeColor(maintenance.tipo_mantenimiento)}
+            color={getTypeColor(maintenance.tipo)}
           />
         </View>
         <View style={styles.headerText}>
@@ -64,13 +65,13 @@ const MaintenanceCard = ({ maintenance, onPress }) => {
           </Text>
           <Text style={styles.date}>{formatDate(maintenance.fecha)}</Text>
         </View>
-        <View style={[styles.typeBadge, { backgroundColor: getTypeColor(maintenance.tipo_mantenimiento) }]}>
-          <Text style={styles.typeBadgeText}>{maintenance.tipo_mantenimiento}</Text>
+        <View style={[styles.typeBadge, { backgroundColor: getTypeColor(maintenance.tipo) }]}>
+          <Text style={styles.typeBadgeText}>{getTipoMantenimientoLabel(maintenance.tipo)}</Text>
         </View>
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.category}>{maintenance.categoria}</Text>
+        <Text style={styles.category}>{getCategoriaMantenimientoLabel(maintenance.categoria)}</Text>
         <Text style={styles.description} numberOfLines={2}>
           {maintenance.descripcion}
         </Text>
