@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { getTipoVehiculoLabel } from '../src/utils/constants';
 
 const VehicleCard = ({ vehicle, onPress }) => {
   const { width } = useWindowDimensions();
@@ -8,11 +9,11 @@ const VehicleCard = ({ vehicle, onPress }) => {
 
   const getVehicleIcon = (tipo) => {
     const iconMap = {
-      'Automóvil': 'car-side',
-      'Motocicleta': 'motorbike',
-      'Camión': 'truck',
+      'AUTO': 'car-side',
+      'MOTO': 'motorbike',
+      'CAMION': 'truck',
       'SUV': 'car-estate',
-      'Van': 'van-utility',
+      'VAN': 'van-utility',
     };
     return iconMap[tipo] || 'car';
   };
@@ -25,7 +26,7 @@ const VehicleCard = ({ vehicle, onPress }) => {
     >
       <View style={styles.iconContainer}>
         <MaterialCommunityIcons
-          name={getVehicleIcon(vehicle.tipo_vehiculo)}
+          name={getVehicleIcon(vehicle.tipo)}
           size={32}
           color="#007AFF"
         />
@@ -36,14 +37,14 @@ const VehicleCard = ({ vehicle, onPress }) => {
           {vehicle.marca} {vehicle.modelo}
         </Text>
         <Text style={styles.subtitle} numberOfLines={1}>
-          {vehicle.placa} • {vehicle.anio}
+          {vehicle.placa} • {vehicle.año}
         </Text>
         <View style={styles.footer}>
           <View style={styles.badge}>
             <MaterialCommunityIcons name="speedometer" size={14} color="#8E8E93" />
             <Text style={styles.badgeText}>{vehicle.kilometraje_actual?.toLocaleString()} km</Text>
           </View>
-          <Text style={styles.type}>{vehicle.tipo_vehiculo}</Text>
+          <Text style={styles.type}>{getTipoVehiculoLabel(vehicle.tipo)}</Text>
         </View>
       </View>
     </TouchableOpacity>

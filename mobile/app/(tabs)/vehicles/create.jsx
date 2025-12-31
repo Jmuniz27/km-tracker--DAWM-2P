@@ -26,9 +26,9 @@ export default function CreateVehicleScreen() {
   const [formData, setFormData] = useState({
     marca: '',
     modelo: '',
-    anio: '',
+    año: '',
     placa: '',
-    tipo_vehiculo: 'Automóvil',
+    tipo: 'AUTO',
     kilometraje_actual: '',
     capacidad_tanque: '',
   });
@@ -47,9 +47,9 @@ export default function CreateVehicleScreen() {
       setFormData({
         marca: vehicle.marca,
         modelo: vehicle.modelo,
-        anio: vehicle.año.toString(),
+        año: vehicle.año.toString(),
         placa: vehicle.placa,
-        tipo_vehiculo: vehicle.tipo_vehiculo,
+        tipo: vehicle.tipo,
         kilometraje_actual: vehicle.kilometraje_actual.toString(),
         capacidad_tanque: vehicle.capacidad_tanque?.toString() || '',
       });
@@ -71,11 +71,11 @@ export default function CreateVehicleScreen() {
       Alert.alert('Error', 'El modelo es requerido');
       return false;
     }
-    if (!formData.anio) {
+    if (!formData.año) {
       Alert.alert('Error', 'El año es requerido');
       return false;
     }
-    const anio = parseInt(formData.anio);
+    const anio = parseInt(formData.año);
     if (isNaN(anio) || anio < 1900 || anio > 2100) {
       Alert.alert('Error', 'El año debe estar entre 1900 y 2100');
       return false;
@@ -115,9 +115,9 @@ export default function CreateVehicleScreen() {
       const data = {
         marca: formData.marca.trim(),
         modelo: formData.modelo.trim(),
-        año: parseInt(formData.anio),
+        año: parseInt(formData.año),
         placa: formData.placa.trim().toUpperCase(),
-        tipo_vehiculo: formData.tipo_vehiculo,
+        tipo: formData.tipo,
         kilometraje_actual: parseFloat(formData.kilometraje_actual),
         capacidad_tanque: parseFloat(formData.capacidad_tanque),
       };
@@ -194,8 +194,8 @@ export default function CreateVehicleScreen() {
               <TextInput
                 style={styles.input}
                 placeholder="2020"
-                value={formData.anio}
-                onChangeText={(text) => setFormData({ ...formData, anio: text })}
+                value={formData.año}
+                onChangeText={(text) => setFormData({ ...formData, año: text })}
                 keyboardType="numeric"
                 editable={!loading}
               />
@@ -220,22 +220,22 @@ export default function CreateVehicleScreen() {
             <View style={styles.typeButtons}>
               {TIPOS_VEHICULO.map((tipo) => (
                 <TouchableOpacity
-                  key={tipo}
+                  key={tipo.value}
                   style={[
                     styles.typeButton,
-                    formData.tipo_vehiculo === tipo && styles.typeButtonActive,
+                    formData.tipo === tipo.value && styles.typeButtonActive,
                   ]}
-                  onPress={() => setFormData({ ...formData, tipo_vehiculo: tipo })}
+                  onPress={() => setFormData({ ...formData, tipo: tipo.value })}
                   disabled={loading}
                   activeOpacity={0.7}
                 >
                   <Text
                     style={[
                       styles.typeButtonText,
-                      formData.tipo_vehiculo === tipo && styles.typeButtonTextActive,
+                      formData.tipo === tipo.value && styles.typeButtonTextActive,
                     ]}
                   >
-                    {tipo}
+                    {tipo.label}
                   </Text>
                 </TouchableOpacity>
               ))}
