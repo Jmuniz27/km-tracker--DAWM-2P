@@ -228,6 +228,9 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
+# Permitir credenciales en CORS (para Swagger UI)
+CORS_ALLOW_CREDENTIALS = True
+
 # Production Security Settings
 if not DEBUG:
     # Configurar Django para trabajar detrás del proxy de Azure
@@ -248,4 +251,14 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,
     'SCHEMA_PATH_PREFIX': '/api/',
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'persistAuthorization': True,
+        'displayOperationId': True,
+    },
+    'SERVE_PERMISSIONS': ['rest_framework.permissions.AllowAny'],
+    'SERVERS': [
+        {'url': 'https://kmtracker-api.azurewebsites.net', 'description': 'Producción (Azure)'},
+        {'url': 'http://127.0.0.1:8000', 'description': 'Desarrollo (Local)'},
+    ],
 }
