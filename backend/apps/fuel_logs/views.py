@@ -15,7 +15,7 @@ class CargaCombustibleViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['tipo_combustible', 'estacion_servicio']
-    ordering_fields = ['fecha', 'kilometraje', 'litros', 'costo_total']
+    ordering_fields = ['fecha', 'kilometraje', 'galones', 'costo_total']
     ordering = ['-fecha']
 
     def get_queryset(self):
@@ -44,18 +44,18 @@ class CargaCombustibleViewSet(viewsets.ModelViewSet):
         if not cargas.exists():
             return Response({
                 'total_cargas': 0,
-                'total_litros': 0,
+                'total_galones': 0,
                 'total_costo': 0,
-                'promedio_litros': 0,
+                'promedio_galones': 0,
                 'promedio_costo': 0,
                 'rendimiento_promedio': None
             })
 
         # Calcular estadísticas
         total_cargas = cargas.count()
-        total_litros = cargas.aggregate(Sum('litros'))['litros__sum'] or 0
+        total_galones = cargas.aggregate(Sum('galones'))['galones__sum'] or 0
         total_costo = cargas.aggregate(Sum('costo_total'))['costo_total__sum'] or 0
-        promedio_litros = cargas.aggregate(Avg('litros'))['litros__avg'] or 0
+        promedio_galones = cargas.aggregate(Avg('galones'))['galones__avg'] or 0
         promedio_costo = cargas.aggregate(Avg('costo_total'))['costo_total__avg'] or 0
 
         # Calcular rendimiento promedio (solo de cargas con tanque lleno)
@@ -68,9 +68,9 @@ class CargaCombustibleViewSet(viewsets.ModelViewSet):
 
         return Response({
             'total_cargas': total_cargas,
-            'total_litros': float(total_litros),
+            'total_galones': float(total_galones),
             'total_costo': float(total_costo),
-            'promedio_litros': float(promedio_litros),
+            'promedio_galones': float(promedio_galones),
             'promedio_costo': float(promedio_costo),
             'rendimiento_promedio': rendimiento_promedio
         })
