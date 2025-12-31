@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import axios from 'axios';
+import { authAPI } from '../../../src/services/api';
 
 export default function ChangePasswordScreen() {
   const router = useRouter();
@@ -68,13 +68,10 @@ export default function ChangePasswordScreen() {
     try {
       setLoading(true);
 
-      await axios.post(
-        `${process.env.EXPO_PUBLIC_API_URL}/api/usuarios/change-password/`,
-        {
-          old_password: formData.old_password,
-          new_password: formData.new_password,
-          new_password2: formData.confirm_password,
-        }
+      await authAPI.changePassword(
+        formData.old_password,
+        formData.new_password,
+        formData.confirm_password
       );
 
       Alert.alert(
