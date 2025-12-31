@@ -1,10 +1,16 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_URL, API_URL_PRODUCTION } from '@env';
+import Constants from 'expo-constants';
+
+// Obtener variables de entorno desde expo-constants (más confiable para builds)
+const expoExtra = Constants.expoConfig?.extra || {};
+const API_URL_PRODUCTION = expoExtra.apiUrlProduction;
+const API_URL = expoExtra.apiUrl;
 
 // Determinar la URL base (prioriza PRODUCTION para trabajar en Azure por defecto)
-const baseURL = API_URL_PRODUCTION || API_URL || 'http://127.0.0.1:8000/api';
+const baseURL = API_URL_PRODUCTION || API_URL || 'https://kmtracker-api.azurewebsites.net/api';
 console.log('🌐 API conectando a:', baseURL);
+console.log('🔧 Expo Extra Config:', expoExtra);
 
 // Crear instancia de axios
 const api = axios.create({

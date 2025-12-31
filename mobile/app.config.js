@@ -1,0 +1,49 @@
+export default {
+  expo: {
+    name: "KmTracker",
+    slug: "kmtracker",
+    version: "1.0.0",
+    orientation: "portrait",
+    icon: "./assets/images/icon.png",
+    scheme: "mobile",
+    userInterfaceStyle: "automatic",
+    newArchEnabled: true,
+    splash: {
+      image: "./assets/images/splash-icon.png",
+      resizeMode: "contain",
+      backgroundColor: "#ffffff"
+    },
+    ios: {
+      supportsTablet: true
+    },
+    android: {
+      adaptiveIcon: {
+        foregroundImage: "./assets/images/adaptive-icon.png",
+        backgroundColor: "#ffffff"
+      },
+      edgeToEdgeEnabled: true,
+      predictiveBackGestureEnabled: false,
+      package: "com.jmuniz27.kmtracker"
+    },
+    web: {
+      bundler: "metro",
+      output: "static",
+      favicon: "./assets/images/favicon.png"
+    },
+    plugins: [
+      "expo-router"
+    ],
+    experiments: {
+      typedRoutes: true
+    },
+    extra: {
+      router: {},
+      eas: {
+        projectId: "5e92633e-5504-4e81-8128-c854b2315261"
+      },
+      // Variables de entorno para builds (accesibles via expo-constants)
+      apiUrl: process.env.API_URL_PRODUCTION || "https://kmtracker-api.azurewebsites.net/api",
+      apiUrlProduction: "https://kmtracker-api.azurewebsites.net/api"
+    }
+  }
+};
