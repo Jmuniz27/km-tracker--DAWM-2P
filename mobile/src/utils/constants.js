@@ -24,11 +24,11 @@ export const TIPO_VEHICULO = {
 
 // Array de tipos de vehículo (para mapear en UI)
 export const TIPOS_VEHICULO = [
-  'Automóvil',
-  'Motocicleta',
-  'Camión',
-  'SUV',
-  'Van',
+  { value: 'AUTO', label: 'Automóvil' },
+  { value: 'MOTO', label: 'Motocicleta' },
+  { value: 'CAMION', label: 'Camión' },
+  { value: 'SUV', label: 'SUV' },
+  { value: 'VAN', label: 'Van' },
 ];
 
 // Tipos de combustible
@@ -127,3 +127,29 @@ export const CONVERSION = {
 
 // Nota: La app ahora usa GALONES exclusivamente
 // Ecuador usa galones como unidad estándar de combustible
+
+// Funciones de conversión código → label
+export const getTipoVehiculoLabel = (codigo) => {
+  const tipo = TIPOS_VEHICULO.find(t => t.value === codigo);
+  return tipo ? tipo.label : codigo;
+};
+
+export const getTipoMantenimientoLabel = (codigo) => {
+  const tipo = TIPOS_MANTENIMIENTO.find(t => t.value === codigo);
+  return tipo ? tipo.label : codigo;
+};
+
+export const getCategoriaMantenimientoLabel = (codigo) => {
+  const cat = CATEGORIAS_MANTENIMIENTO.find(c => c.value === codigo);
+  return cat ? cat.label : codigo;
+};
+
+export const getPrioridadAlertaLabel = (codigo) => {
+  const prio = PRIORIDADES_ALERTA.find(p => p.value === codigo);
+  return prio ? prio.label : codigo;
+};
+
+export const getTipoCombustibleLabel = (codigo) => {
+  const tipo = TIPOS_COMBUSTIBLE.find(t => t.value === codigo);
+  return tipo ? tipo.label : codigo;
+};
