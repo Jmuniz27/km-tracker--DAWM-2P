@@ -38,7 +38,7 @@ export default function FuelScreen() {
 
       // Calcular estadísticas simples
       if (logs.length > 0) {
-        const total = logs.reduce((sum, log) => sum + parseFloat(log.precio_total), 0);
+        const total = logs.reduce((sum, log) => sum + parseFloat(log.costo_total), 0);
         setStats({
           count: logs.length,
           totalSpent: total,

@@ -250,7 +250,7 @@ export default function HomeScreen() {
                 </View>
                 <View style={styles.fuelRight}>
                   <Text style={styles.fuelLiters}>{fuel.galones} gal</Text>
-                  <Text style={styles.fuelPrice}>${parseFloat(fuel.costo).toFixed(2)}</Text>
+                  <Text style={styles.fuelPrice}>${parseFloat(fuel.costo_total).toFixed(2)}</Text>
                 </View>
               </TouchableOpacity>
             ))}
