@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "env:local": "node scripts/switch-env.js local",
+    "env:local-device": "node scripts/switch-env.js local-device",
     "env:remote": "node scripts/switch-env.js remote"
   },
   "dependencies": {

@@ -2,10 +2,14 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL, API_URL_PRODUCTION } from '@env';
 
+// Determinar la URL base (prioriza PRODUCTION para trabajar en Azure por defecto)
+const baseURL = API_URL_PRODUCTION || API_URL || 'http://127.0.0.1:8000/api';
+console.log('🌐 API conectando a:', baseURL);
+
 // Crear instancia de axios
 const api = axios.create({
-  baseURL: API_URL || API_URL_PRODUCTION || 'http://127.0.0.1:8000/api',
-  timeout: 10000,
+  baseURL: baseURL,
+  timeout: 30000, // 30 segundos para Azure
   headers: {
     'Content-Type': 'application/json',
   },
@@ -46,7 +50,7 @@ api.interceptors.response.use(
         const refreshToken = await AsyncStorage.getItem('refresh_token');
 
         if (refreshToken) {
-          const baseURL = API_URL || API_URL_PRODUCTION || 'http://127.0.0.1:8000/api';
+          const baseURL = API_URL_PRODUCTION || API_URL || 'http://127.0.0.1:8000/api';
           const response = await axios.post(
             `${baseURL}/auth/refresh/`,
             { refresh: refreshToken }
