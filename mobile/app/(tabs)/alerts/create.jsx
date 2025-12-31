@@ -28,7 +28,6 @@ export default function CreateAlertScreen() {
     vehiculo: '',
     titulo: '',
     descripcion: '',
-    tipo_alerta: 'Kilometraje',
     kilometraje_objetivo: '',
     fecha_objetivo: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 días adelante
     prioridad: 'MEDIA', // Clave en mayúsculas para API
@@ -65,7 +64,6 @@ export default function CreateAlertScreen() {
         vehiculo: alert.vehiculo.toString(),
         titulo: alert.titulo,
         descripcion: alert.descripcion || '',
-        tipo_alerta: alert.tipo_alerta,
         kilometraje_objetivo: alert.kilometraje_objetivo ? alert.kilometraje_objetivo.toString() : '',
         fecha_objetivo: alert.fecha_objetivo || '',
         prioridad: alert.prioridad,
@@ -89,19 +87,16 @@ export default function CreateAlertScreen() {
       return false;
     }
 
-    if (formData.tipo_alerta === 'Kilometraje') {
-      if (!formData.kilometraje_objetivo) {
-        Alert.alert('Error', 'El kilometraje objetivo es requerido');
-        return false;
-      }
+    // Al menos uno de los objetivos debe estar definido
+    if (!formData.kilometraje_objetivo && !formData.fecha_objetivo) {
+      Alert.alert('Error', 'Debes especificar al menos un objetivo (kilometraje o fecha)');
+      return false;
+    }
+
+    if (formData.kilometraje_objetivo) {
       const km = parseFloat(formData.kilometraje_objetivo);
       if (isNaN(km) || km <= 0) {
         Alert.alert('Error', 'El kilometraje debe ser mayor a 0');
-        return false;
-      }
-    } else {
-      if (!formData.fecha_objetivo) {
-        Alert.alert('Error', 'La fecha objetivo es requerida');
         return false;
       }
     }
@@ -119,10 +114,9 @@ export default function CreateAlertScreen() {
       const data = {
         vehiculo: parseInt(formData.vehiculo),
         titulo: formData.titulo.trim(),
-        descripcion: formData.descripcion.trim(), // descripcion es requerido en el backend
-        tipo_alerta: formData.tipo_alerta,
-        kilometraje_objetivo: formData.tipo_alerta === 'Kilometraje' ? parseFloat(formData.kilometraje_objetivo) : null,
-        fecha_objetivo: formData.tipo_alerta === 'Fecha' ? formData.fecha_objetivo : null,
+        descripcion: formData.descripcion.trim() || 'Alerta de mantenimiento',
+        kilometraje_objetivo: formData.kilometraje_objetivo ? parseFloat(formData.kilometraje_objetivo) : null,
+        fecha_objetivo: formData.fecha_objetivo || null,
         prioridad: formData.prioridad,
       };
 
@@ -245,86 +239,32 @@ export default function CreateAlertScreen() {
             />
           </View>
 
-          {/* Tipo de Alerta */}
+          {/* Kilometraje Objetivo */}
           <View style={styles.inputGroup}>
-            <Text style={styles.label}>Tipo de Alerta *</Text>
-            <View style={styles.typeButtons}>
-              <TouchableOpacity
-                style={[
-                  styles.typeButton,
-                  formData.tipo_alerta === 'Kilometraje' && styles.typeButtonActive,
-                ]}
-                onPress={() => setFormData({ ...formData, tipo_alerta: 'Kilometraje' })}
-                disabled={loading}
-                activeOpacity={0.7}
-              >
-                <MaterialCommunityIcons
-                  name="speedometer"
-                  size={20}
-                  color={formData.tipo_alerta === 'Kilometraje' ? '#FFFFFF' : '#8E8E93'}
-                />
-                <Text
-                  style={[
-                    styles.typeButtonText,
-                    formData.tipo_alerta === 'Kilometraje' && styles.typeButtonTextActive,
-                  ]}
-                >
-                  Kilometraje
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.typeButton,
-                  formData.tipo_alerta === 'Fecha' && styles.typeButtonActive,
-                ]}
-                onPress={() => setFormData({ ...formData, tipo_alerta: 'Fecha' })}
-                disabled={loading}
-                activeOpacity={0.7}
-              >
-                <MaterialCommunityIcons
-                  name="calendar"
-                  size={20}
-                  color={formData.tipo_alerta === 'Fecha' ? '#FFFFFF' : '#8E8E93'}
-                />
-                <Text
-                  style={[
-                    styles.typeButtonText,
-                    formData.tipo_alerta === 'Fecha' && styles.typeButtonTextActive,
-                  ]}
-                >
-                  Fecha
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <Text style={styles.label}>Kilometraje Objetivo (opcional)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="55000"
+              value={formData.kilometraje_objetivo}
+              onChangeText={(text) => setFormData({ ...formData, kilometraje_objetivo: text })}
+              keyboardType="numeric"
+              editable={!loading}
+            />
+            <Text style={styles.hint}>Se activará al alcanzar este kilometraje</Text>
           </View>
 
-          {/* Campo condicional según tipo */}
-          {formData.tipo_alerta === 'Kilometraje' ? (
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Kilometraje Objetivo *</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="55000"
-                value={formData.kilometraje_objetivo}
-                onChangeText={(text) => setFormData({ ...formData, kilometraje_objetivo: text })}
-                keyboardType="numeric"
-                editable={!loading}
-              />
-              <Text style={styles.hint}>Se activará al alcanzar este kilometraje</Text>
-            </View>
-          ) : (
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Fecha Objetivo *</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="YYYY-MM-DD"
-                value={formData.fecha_objetivo}
-                onChangeText={(text) => setFormData({ ...formData, fecha_objetivo: text })}
-                editable={!loading}
-              />
-              <Text style={styles.hint}>Formato: YYYY-MM-DD</Text>
-            </View>
-          )}
+          {/* Fecha Objetivo */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Fecha Objetivo (opcional)</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="YYYY-MM-DD"
+              value={formData.fecha_objetivo}
+              onChangeText={(text) => setFormData({ ...formData, fecha_objetivo: text })}
+              editable={!loading}
+            />
+            <Text style={styles.hint}>Formato: YYYY-MM-DD. Al menos un objetivo es requerido</Text>
+          </View>
 
           {/* Prioridad */}
           <View style={styles.inputGroup}>

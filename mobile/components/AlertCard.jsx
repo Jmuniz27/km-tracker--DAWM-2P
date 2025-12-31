@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { getPrioridadAlertaLabel } from '../src/utils/constants';
 
 const AlertCard = ({ alert, onPress }) => {
   const { width } = useWindowDimensions();
@@ -8,37 +9,38 @@ const AlertCard = ({ alert, onPress }) => {
 
   const getPriorityColor = (prioridad) => {
     const colorMap = {
-      'Baja': '#34C759',
-      'Media': '#FF9500',
-      'Alta': '#FF3B30',
-      'Urgente': '#FF3B30',
+      'BAJA': '#34C759',
+      'MEDIA': '#FF9500',
+      'ALTA': '#FF3B30',
+      'URGENTE': '#FF3B30',
     };
     return colorMap[prioridad] || '#8E8E93';
   };
 
   const getStatusInfo = (alert) => {
-    const isKilometraje = alert.tipo_alerta === 'Kilometraje';
-    const currentValue = isKilometraje
-      ? alert.vehiculo_detalle?.kilometraje_actual
-      : new Date();
-    const targetValue = isKilometraje
-      ? alert.kilometraje_objetivo
-      : new Date(alert.fecha_objetivo);
+    // Verificar si hay objetivo de kilometraje
+    const hasKmObjective = alert.kilometraje_objetivo;
+    const hasFechaObjective = alert.fecha_objetivo;
+
+    const currentKm = alert.vehiculo_detalle?.kilometraje_actual;
+    const targetKm = alert.kilometraje_objetivo;
+    const targetDate = alert.fecha_objetivo ? new Date(alert.fecha_objetivo) : null;
+    const currentDate = new Date();
 
     let isExpired = false;
     let progress = 0;
 
-    if (isKilometraje) {
-      isExpired = currentValue >= targetValue;
-      progress = Math.min((currentValue / targetValue) * 100, 100);
-    } else {
-      isExpired = currentValue >= targetValue;
+    if (hasKmObjective && currentKm && targetKm) {
+      isExpired = currentKm >= targetKm;
+      progress = Math.min((currentKm / targetKm) * 100, 100);
+    } else if (hasFechaObjective && targetDate) {
+      isExpired = currentDate >= targetDate;
       progress = isExpired ? 100 : 0;
     }
 
     return {
       isExpired,
-      isActive: !isExpired && !alert.completada,
+      isActive: !isExpired && alert.activa,
       progress,
     };
   };
@@ -92,25 +94,25 @@ const AlertCard = ({ alert, onPress }) => {
           <View style={styles.detailRow}>
             <View style={styles.detailItem}>
               <MaterialCommunityIcons
-                name={alert.tipo_alerta === 'Kilometraje' ? 'speedometer' : 'calendar'}
+                name={alert.kilometraje_objetivo ? 'speedometer' : 'calendar'}
                 size={16}
                 color="#8E8E93"
               />
               <Text style={styles.detailText}>
-                {alert.tipo_alerta === 'Kilometraje'
+                {alert.kilometraje_objetivo
                   ? `${alert.kilometraje_objetivo?.toLocaleString()} km`
-                  : formatDate(alert.fecha_objetivo)
+                  : alert.fecha_objetivo ? formatDate(alert.fecha_objetivo) : 'Sin objetivo'
                 }
               </Text>
             </View>
             <View style={[styles.priorityBadge, { backgroundColor: priorityColor + '20' }]}>
               <Text style={[styles.priorityText, { color: priorityColor }]}>
-                {alert.prioridad}
+                {getPrioridadAlertaLabel(alert.prioridad)}
               </Text>
             </View>
           </View>
 
-          {alert.tipo_alerta === 'Kilometraje' && (
+          {alert.kilometraje_objetivo && (
             <View style={styles.progressContainer}>
               <View style={styles.progressBar}>
                 <View

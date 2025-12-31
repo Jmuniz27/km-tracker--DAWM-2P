@@ -39,9 +39,9 @@ export default function AlertsScreen() {
       setAlerts(alertsList);
 
       // Calcular estadísticas
-      const active = alertsList.filter(a => !a.completada && !isExpired(a)).length;
-      const expired = alertsList.filter(a => isExpired(a) && !a.completada).length;
-      const completed = alertsList.filter(a => a.completada).length;
+      const active = alertsList.filter(a => a.activa && !isExpired(a)).length;
+      const expired = alertsList.filter(a => isExpired(a) && a.activa).length;
+      const completed = alertsList.filter(a => !a.activa).length;
 
       setStats({
         total: alertsList.length,
@@ -62,11 +62,13 @@ export default function AlertsScreen() {
   }, []);
 
   const isExpired = (alert) => {
-    if (alert.tipo_alerta === 'Kilometraje') {
-      return alert.vehiculo_detalle?.kilometraje_actual >= alert.kilometraje_objetivo;
-    } else {
-      return new Date() >= new Date(alert.fecha_objetivo);
-    }
+    // Verificar si la alerta está vencida por kilometraje o por fecha
+    const expiredByKm = alert.kilometraje_objetivo &&
+                       alert.vehiculo_detalle?.kilometraje_actual >= alert.kilometraje_objetivo;
+    const expiredByDate = alert.fecha_objetivo &&
+                         new Date() >= new Date(alert.fecha_objetivo);
+
+    return expiredByKm || expiredByDate;
   };
 
   useEffect(() => {
@@ -78,11 +80,11 @@ export default function AlertsScreen() {
     let filtered = [...alerts];
 
     if (filter === 'active') {
-      filtered = alerts.filter(a => !a.completada && !isExpired(a));
+      filtered = alerts.filter(a => a.activa && !isExpired(a));
     } else if (filter === 'expired') {
-      filtered = alerts.filter(a => isExpired(a) && !a.completada);
+      filtered = alerts.filter(a => isExpired(a) && a.activa);
     } else if (filter === 'completed') {
-      filtered = alerts.filter(a => a.completada);
+      filtered = alerts.filter(a => !a.activa);
     }
 
     setFilteredAlerts(filtered);
