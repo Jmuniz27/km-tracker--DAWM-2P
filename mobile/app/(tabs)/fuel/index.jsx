@@ -116,10 +116,10 @@ export default function FuelScreen() {
           styles.listContent,
           {
             paddingHorizontal: isMobile ? 16 : 24,
-            flexDirection: isMobile ? 'column' : 'row',
-            flexWrap: isMobile ? 'nowrap' : 'wrap',
           },
         ]}
+        numColumns={isMobile ? 1 : 2}
+        key={isMobile ? 'mobile' : 'web'}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

@@ -109,7 +109,7 @@ export default function FuelDetailScreen() {
     return null;
   }
 
-  const totalCost = parseFloat(fuel.costo);
+  const totalCost = parseFloat(fuel.costo_total);
   const pricePerGallon = parseFloat(fuel.precio_galon);
   const gallons = parseFloat(fuel.galones);
 

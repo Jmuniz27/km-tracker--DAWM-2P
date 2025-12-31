@@ -58,7 +58,7 @@ const FuelCard = ({ fuelLog, onPress }) => {
             </View>
             <View style={styles.detailItem}>
               <MaterialCommunityIcons name="cash" size={16} color="#8E8E93" />
-              <Text style={styles.detailText}>{formatCurrency(fuelLog.precio_total)}</Text>
+              <Text style={styles.detailText}>{formatCurrency(fuelLog.costo_total)}</Text>
             </View>
           </View>
           <View style={styles.detailRow}>
