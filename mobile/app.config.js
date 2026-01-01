@@ -23,7 +23,11 @@ export default {
       },
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
-      package: "com.jmuniz27.kmtracker"
+      package: "com.jmuniz27.kmtracker",
+      // Configuración de compatibilidad Android
+      minSdkVersion: 23,  // Android 6.0 (Marshmallow) - Lanzado en 2015
+      targetSdkVersion: 34,  // Android 14 - Última versión estable
+      compileSdkVersion: 34
     },
     web: {
       bundler: "metro",
