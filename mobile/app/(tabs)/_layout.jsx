@@ -80,7 +80,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="two"
         options={{
-          href: null, // Ocultar tab "two" temporalmente
+          title: 'Estadísticas',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="chart-line" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>

@@ -15,6 +15,7 @@ import { cargasAPI } from '../../../src/services/api';
 import FuelCard from '../../../components/FuelCard';
 import EmptyState from '../../../components/EmptyState';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import { calcularRendimientoPromedio } from '../../../src/utils/fuelCalculations';
 
 export default function FuelScreen() {
   const router = useRouter();
@@ -34,15 +35,24 @@ export default function FuelScreen() {
 
       const response = await cargasAPI.getAll();
       const logs = response.data.results || response.data || [];
-      setFuelLogs(logs);
 
-      // Calcular estadísticas simples
-      if (logs.length > 0) {
-        const total = logs.reduce((sum, log) => sum + parseFloat(log.costo_total), 0);
+      // Ordenar por kilometraje descendente (más reciente primero)
+      const sortedLogs = [...logs].sort((a, b) => b.kilometraje - a.kilometraje);
+      setFuelLogs(sortedLogs);
+
+      // Calcular estadísticas completas
+      if (sortedLogs.length > 0) {
+        const total = sortedLogs.reduce((sum, log) => sum + parseFloat(log.costo_total), 0);
+        const totalGalones = sortedLogs.reduce((sum, log) => sum + parseFloat(log.galones), 0);
+        const rendimientoPromedio = calcularRendimientoPromedio(sortedLogs);
+
         setStats({
-          count: logs.length,
+          count: sortedLogs.length,
           totalSpent: total,
-          avgPerFill: total / logs.length,
+          avgPerFill: total / sortedLogs.length,
+          totalGalones: totalGalones,
+          avgGalones: totalGalones / sortedLogs.length,
+          rendimientoPromedio: rendimientoPromedio,
         });
       } else {
         setStats(null);
@@ -98,9 +108,17 @@ export default function FuelScreen() {
               <Text style={styles.statValue}>${stats.totalSpent.toFixed(2)}</Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={styles.statLabel}>Promedio</Text>
+              <Text style={styles.statLabel}>Promedio por carga</Text>
               <Text style={styles.statValue}>${stats.avgPerFill.toFixed(2)}</Text>
             </View>
+            {stats.rendimientoPromedio && (
+              <View style={[styles.statItem, styles.statItemHighlight]}>
+                <Text style={styles.statLabel}>Rendimiento promedio</Text>
+                <Text style={[styles.statValue, styles.statValueHighlight]}>
+                  {stats.rendimientoPromedio.toFixed(2)} km/gal
+                </Text>
+              </View>
+            )}
           </View>
         )}
       </View>
@@ -109,9 +127,17 @@ export default function FuelScreen() {
       <FlatList
         data={fuelLogs}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <FuelCard fuelLog={item} onPress={handleFuelLogPress} />
-        )}
+        renderItem={({ item, index }) => {
+          // Obtener la carga anterior (siguiente en el array ordenado por km descendente)
+          const cargaAnterior = index < fuelLogs.length - 1 ? fuelLogs[index + 1] : null;
+          return (
+            <FuelCard
+              fuelLog={item}
+              cargaAnterior={cargaAnterior}
+              onPress={handleFuelLogPress}
+            />
+          );
+        }}
         contentContainerStyle={[
           styles.listContent,
           {
@@ -190,6 +216,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#007AFF',
+  },
+  statItemHighlight: {
+    backgroundColor: '#007AFF',
+  },
+  statValueHighlight: {
+    color: '#FFFFFF',
   },
   listContent: {
     paddingVertical: 8,

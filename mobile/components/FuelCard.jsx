@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { calcularRendimiento, clasificarEficiencia, formatearRendimiento } from '../src/utils/fuelCalculations';
 
-const FuelCard = ({ fuelLog, onPress }) => {
+const FuelCard = ({ fuelLog, cargaAnterior, onPress }) => {
   const { width } = useWindowDimensions();
   const isMobile = width < 768;
 
@@ -28,6 +29,10 @@ const FuelCard = ({ fuelLog, onPress }) => {
   const formatCurrency = (value) => {
     return `$${parseFloat(value).toFixed(2)}`;
   };
+
+  // Calcular rendimiento si existe carga anterior
+  const rendimiento = calcularRendimiento(fuelLog, cargaAnterior);
+  const eficiencia = clasificarEficiencia(rendimiento);
 
   return (
     <TouchableOpacity
@@ -62,7 +67,7 @@ const FuelCard = ({ fuelLog, onPress }) => {
             </View>
           </View>
           <View style={styles.detailRow}>
-            <View style={styles.badge} style={[styles.badge, { backgroundColor: getFuelColor(fuelLog.tipo_combustible) + '20' }]}>
+            <View style={[styles.badge, { backgroundColor: getFuelColor(fuelLog.tipo_combustible) + '20' }]}>
               <Text style={[styles.badgeText, { color: getFuelColor(fuelLog.tipo_combustible) }]}>
                 {fuelLog.tipo_combustible}
               </Text>
@@ -72,6 +77,24 @@ const FuelCard = ({ fuelLog, onPress }) => {
               <Text style={styles.detailText}>{fuelLog.kilometraje?.toLocaleString()} km</Text>
             </View>
           </View>
+          {rendimiento !== null && (
+            <View style={styles.detailRow}>
+              <View style={[styles.efficiencyBadge, { backgroundColor: eficiencia.color + '20' }]}>
+                <MaterialCommunityIcons name={eficiencia.icon} size={14} color={eficiencia.color} />
+                <Text style={[styles.efficiencyText, { color: eficiencia.color }]}>
+                  {formatearRendimiento(rendimiento)}
+                </Text>
+              </View>
+              <Text style={[styles.efficiencyLabel, { color: eficiencia.color }]}>
+                {eficiencia.label}
+              </Text>
+            </View>
+          )}
+          {rendimiento === null && (
+            <View style={styles.detailRow}>
+              <Text style={styles.firstLoadText}>Primera carga</Text>
+            </View>
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -151,6 +174,27 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 12,
     fontWeight: '600',
+  },
+  efficiencyBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  efficiencyText: {
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  efficiencyLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  firstLoadText: {
+    fontSize: 12,
+    color: '#8E8E93',
+    fontStyle: 'italic',
   },
 });
 
