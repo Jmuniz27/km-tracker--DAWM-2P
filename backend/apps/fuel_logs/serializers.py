@@ -1,5 +1,7 @@
 from rest_framework import serializers
+from django.db import models
 from .models import CargaCombustible
+from apps.vehicles.models import Vehiculo
 
 
 class CargaCombustibleSerializer(serializers.ModelSerializer):
@@ -48,10 +50,20 @@ class CargaCombustibleSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """Validaciones a nivel de objeto"""
         # Verificar que el kilometraje no sea menor al kilometraje actual del vehículo
-        if 'vehiculo' in data and 'kilometraje' in data:
-            if data['kilometraje'] < data['vehiculo'].kilometraje_actual:
+        vehiculo = data.get('vehiculo') or (self.instance.vehiculo if self.instance else None)
+        kilometraje = data.get('kilometraje')
+        
+        if vehiculo and kilometraje:
+            if kilometraje < vehiculo.kilometraje_actual:
                 raise serializers.ValidationError({
-                    'kilometraje': 'El kilometraje no puede ser menor al kilometraje actual del vehículo'
+                    'kilometraje': f'El kilometraje ({kilometraje} km) no puede ser menor al actual del vehículo ({vehiculo.kilometraje_actual} km)'
+                })
+            
+            # Validar que los galones no excedan la capacidad del tanque
+            galones = data.get('galones')
+            if galones and galones > vehiculo.capacidad_tanque:
+                raise serializers.ValidationError({
+                    'galones': f'Los galones ({galones}) exceden la capacidad del tanque ({vehiculo.capacidad_tanque} gal)'
                 })
 
         # Calcular costo_total automáticamente si no se proporciona
@@ -59,3 +71,37 @@ class CargaCombustibleSerializer(serializers.ModelSerializer):
             data['costo_total'] = data['galones'] * data['precio_galon']
 
         return data
+
+    def create(self, validated_data):
+        """Crea la carga y actualiza el kilometraje del vehículo"""
+        carga = CargaCombustible.objects.create(**validated_data)
+        
+        # Actualizar kilometraje del vehículo
+        self._actualizar_kilometraje_vehiculo(carga.vehiculo, carga.kilometraje)
+        
+        return carga
+
+    def update(self, instance, validated_data):
+        """Actualiza la carga y el kilometraje del vehículo si cambió"""
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        
+        # Actualizar kilometraje del vehículo si cambió
+        if 'kilometraje' in validated_data:
+            # Buscar el kilometraje máximo de todas las cargas
+            max_km = CargaCombustible.objects.filter(
+                vehiculo=instance.vehiculo
+            ).aggregate(models.Max('kilometraje'))['kilometraje__max']
+            
+            if max_km:
+                self._actualizar_kilometraje_vehiculo(instance.vehiculo, max_km)
+        
+        return instance
+
+    def _actualizar_kilometraje_vehiculo(self, vehiculo, nuevo_kilometraje):
+        """Método auxiliar para actualizar el kilometraje del vehículo"""
+        if nuevo_kilometraje > vehiculo.kilometraje_actual:
+            vehiculo.kilometraje_actual = nuevo_kilometraje
+            vehiculo.save(update_fields=['kilometraje_actual', 'fecha_actualizacion'])
+
