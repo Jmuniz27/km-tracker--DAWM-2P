@@ -6,6 +6,10 @@ echo "Starting KmTracker API deployment..."
 echo "Running migrations..."
 python manage.py migrate --noinput
 
+# Sincronizar kilometrajes (una vez)
+echo "Syncing vehicle mileage..."
+python manage.py sync_kilometraje
+
 # Recolectar archivos estáticos
 echo "Collecting static files..."
 python manage.py collectstatic --noinput --clear
