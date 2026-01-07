@@ -79,7 +79,7 @@ def vehiculos_publicos(request):
         'marca': v.marca,
         'modelo': v.modelo,
         'año': v.año,
-        'tipo_combustible': v.tipo_combustible,
+        'tipo': v.get_tipo_display(),  # Obtiene el label legible del choice
         'placa': v.placa,
     } for v in vehiculos]
     return Response(data)
