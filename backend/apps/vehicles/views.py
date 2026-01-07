@@ -1,7 +1,7 @@
 from rest_framework import viewsets, filters, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Vehiculo
 from .serializers import VehiculoSerializer
 
@@ -64,3 +64,22 @@ class VehiculoViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(vehiculo)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def vehiculos_publicos(request):
+    """
+    Endpoint público para mostrar vehículos sin autenticación.
+    Requerido para pantalla de sustentación.
+    """
+    vehiculos = Vehiculo.objects.all()[:10]
+    data = [{
+        'id': v.id,
+        'marca': v.marca,
+        'modelo': v.modelo,
+        'año': v.año,
+        'tipo_combustible': v.tipo_combustible,
+        'placa': v.placa,
+    } for v in vehiculos]
+    return Response(data)
